@@ -2,14 +2,25 @@
 
 require 'optparse'
 
-def main(target_file)
-  counted_results = []
+def main(target_files)
+  counting_results = []
 
-  line_count = count_lines(target_file)
-  record = "#{line_count.to_s.rjust(8)} #{target_file}"
-  counted_results.push record
+  target_files.each do |target_file|
+    file = {}
+    file[:filename] = target_file
 
-  "#{counted_results.join("\n")}\n"
+    file[:line] = count_lines(target_file)    # if params[:r]
+
+    counting_results.push file
+  end
+
+  total_lines = counting_results.sum { |file| file[:line] }
+  total = { filename: 'total', line: total_lines }
+  counting_results.push total if counting_results.size >=2
+
+  counting_results.map do |filerecord|
+    "#{filerecord[:line].to_s.rjust(8)} #{filerecord[:filename]}"
+  end.join("\n")
 end
 
 def count_lines(target_file)
