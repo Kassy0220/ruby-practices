@@ -5,7 +5,5 @@ require 'optparse'
 require_relative 'wc'
 
 params = ARGV.getopts('l')
-## TODO : 標準入力にも対応できるようにする。
-target_files = ARGV
 
-puts main(target_files)
+puts ARGV.empty? ? count_stdin($stdin) : count_files(ARGV)
