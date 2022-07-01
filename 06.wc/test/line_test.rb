@@ -8,20 +8,23 @@ class LineTest < Minitest::Test
   def test_a_file_lines
     target_file_path = 'test/fixtures/sample.txt'
     expected = `wc -l #{target_file_path}`
-    assert_output(expected) { puts count_files([target_file_path]) }
+    params = { count_line: true }
+    assert_output(expected) { puts count_files([target_file_path], params) }
   end
 
   def test_two_files_lines
     first_target_file_path = 'test/fixtures/sample.txt'
     second_target_file_path = 'test/fixtures/second_sample.txt'
     expected = `wc -l #{first_target_file_path} #{second_target_file_path}`
-    assert_output(expected) { puts count_files([first_target_file_path, second_target_file_path]) }
+    params = { count_line: true }
+    assert_output(expected) { puts count_files([first_target_file_path, second_target_file_path], params) }
   end
 
   def test_empty_file
     target_file_path = 'test/fixtures/empty.txt'
     expected = `wc -l #{target_file_path}`
-    assert_output(expected) { puts count_files([target_file_path]) }
+    params = { count_line: true }
+    assert_output(expected) { puts count_files([target_file_path], params) }
   end
 
   def test_stdin_lines
@@ -32,6 +35,7 @@ class LineTest < Minitest::Test
 EOS\n"
     expected = `wc -l #{stdin}`
     $stdin = StringIO.new("hoge\nfuga\npiyo\n")
-    assert_output(expected) { puts count_stdin($stdin) }
+    params = { count_line: true }
+    assert_output(expected) { puts count_stdin($stdin, params) }
   end 
 end
