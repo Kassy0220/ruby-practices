@@ -21,6 +21,13 @@ class WordTest < Minitest::Test
   end
 
   def test_count_stdin_words
-    skip("これから実装予定")
+    text = 'RuboCop is a Ruby static code analyzer (a.k.a. linter) and code formatter. Out of the box it will enforce many of the guidelines outlined in the community Ruby Style Guide.'
+    stdin = "<<EOS
+    #{text}
+EOS\n"
+    expected = `wc -w #{stdin}`
+    $stdin = StringIO.new("text")
+    params = { count_word: true }
+    assert_output(expected) { puts count_stdin($stdin, params) }
   end
 end
