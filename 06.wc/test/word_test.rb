@@ -8,7 +8,7 @@ class WordTest < Minitest::Test
   def test_a_file_words
     target_file_path = 'test/fixtures/sample.txt'
     expected = `wc -w #{target_file_path}`
-    params = { word_count: true }
+    params = { count_word: true }
     assert_output(expected) { puts count_files([target_file_path], params) }
   end
 
