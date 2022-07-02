@@ -7,14 +7,15 @@ def count_stdin(stdin, params)
 end
 
 def count_files(argv, params)
-  counting_results = []
   target_files = argv
+  counting_results = []
 
   target_files.each do |target_file|
+    text = IO.read(target_file)
     file = {}
     file[:name] = target_file
-    file[:line] = count_line(target_file) if params[:count_line]
-    file[:word] = count_word(target_file) if params[:count_word]
+    file[:line] = count_line(text) if params[:count_line]
+    file[:word] = count_word(text) if params[:count_word]
 
     counting_results.push file
   end
@@ -33,12 +34,12 @@ def count_files(argv, params)
   end.join("\n")
 end
 
-def count_line(target_file)
-  IO.read(target_file).count("\n")
+def count_line(text)
+  text.count("\n")
 end
 
-def count_word(target_file)
-  IO.read(target_file).scan(/\S+/).size
+def count_word(text)
+  text.scan(/\S+/).size
 end
 
 def create_format(params)
