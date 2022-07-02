@@ -5,14 +5,14 @@ require 'stringio'
 require_relative '../lib/wc'
 
 class LineTest < Minitest::Test
-  def test_a_file_lines
+  def test_count_a_file_lines
     target_file_path = 'test/fixtures/sample.txt'
     expected = `wc -l #{target_file_path}`
     params = { count_line: true }
     assert_output(expected) { puts count_files([target_file_path], params) }
   end
 
-  def test_two_files_lines
+  def test_count_two_files_lines
     first_target_file_path = 'test/fixtures/sample.txt'
     second_target_file_path = 'test/fixtures/second_sample.txt'
     expected = `wc -l #{first_target_file_path} #{second_target_file_path}`
@@ -20,7 +20,7 @@ class LineTest < Minitest::Test
     assert_output(expected) { puts count_files([first_target_file_path, second_target_file_path], params) }
   end
 
-  def test_empty_file
+  def test_count_empty_file
     target_file_path = 'test/fixtures/empty.txt'
     expected = `wc -l #{target_file_path}`
     params = { count_line: true }
