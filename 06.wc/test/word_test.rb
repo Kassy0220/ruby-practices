@@ -13,7 +13,11 @@ class WordTest < Minitest::Test
   end
 
   def test_count_two_files_words
-    skip("これから実装予定")
+    first_target_file_path = 'test/fixtures/sample.txt'
+    second_target_file_path = 'test/fixtures/second_sample.txt'
+    expected = `wc -w #{first_target_file_path} #{second_target_file_path}`
+    params = { count_word: true }
+    assert_output(expected) { puts count_files([first_target_file_path, second_target_file_path], params) }
   end
 
   def test_count_stdin_words
