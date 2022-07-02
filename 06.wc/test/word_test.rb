@@ -26,7 +26,7 @@ class WordTest < Minitest::Test
     #{text}
 EOS\n"
     expected = `wc -w #{stdin}`
-    $stdin = StringIO.new("text")
+    $stdin = StringIO.new(text)
     params = { count_word: true }
     assert_output(expected) { puts count_stdin($stdin, params) }
   end

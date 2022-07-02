@@ -1,9 +1,12 @@
 # frozen_string_literal: true
 require 'debug'
 def count_stdin(stdin, params)
-  stdin = stdin.read
-  lines = stdin.count("\n") if params[:count_line]
-  "#{lines.to_s.rjust(8)}"
+  text = stdin.read
+  line = count_line(text) if params[:count_line]
+  word = count_word(text) if params[:count_word]
+
+  format_model = create_format(params).gsub(/ %<name>s/, '')
+  format(format_model, line: line, word: word)
 end
 
 def count_files(argv, params)
@@ -23,6 +26,7 @@ def count_files(argv, params)
   if counting_results.size >= 2
     total = {}
     total[:name] = 'total'
+    ## TODO: メソッドに切り出す
     total[:line] = counting_results.sum { |file| file[:line] } if params[:count_line]
     total[:word] = counting_results.sum { |file| file[:word] } if params[:count_word]
     counting_results.push total

@@ -27,7 +27,7 @@ class MultipleOptionsTest < Minitest::Test
     #{text}
 EOS\n"
     expected = `wc -l -w #{stdin}`
-    $stdin = StringIO.new("text")
+    $stdin = StringIO.new(text)
     params = { count_line: true, count_word: true }
     assert_output(expected) { puts count_stdin($stdin, params) }
   end
