@@ -42,9 +42,9 @@ def count_word(target_file)
 end
 
 def create_format(params)
-  format = []
-  format.push '%<line>8d' if params[:count_line]
-  format.push '%<word>8d' if params[:count_word]
-  format.push ' %<name>s' 
-  format.join
+  format_model = []
+  format_model.push '%<line>8d' if params[:count_line]
+  format_model.push '%<word>8d' if params[:count_word]
+  format_model.push ' %<name>s' 
+  format_model.join
 end
