@@ -18,4 +18,12 @@ class ByteTest < Minitest::Test
     params = { count_byte: true }
     assert_output(expected) { puts count_files([target_file_path], params) }
   end
+
+  def test_count_words_in_two_files
+    first_target_file_path = 'test/fixtures/sample.txt'
+    second_target_file_path = 'test/fixtures/second_sample.txt'
+    expected = `wc -c #{first_target_file_path} #{second_target_file_path}`
+    params = { count_byte: true }
+    assert_output(expected) { puts count_files([first_target_file_path, second_target_file_path], params) }
+  end
 end

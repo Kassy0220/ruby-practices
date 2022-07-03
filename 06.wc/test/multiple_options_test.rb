@@ -35,11 +35,35 @@ class MultipleOptionsTest < Minitest::Test
   end
 
   # 引数にファイルを2つ指定した時のテスト
+  def test_count_two_files_with_lwc_options
+    first_target_file_path = 'test/fixtures/sample.txt'
+    second_target_file_path = 'test/fixtures/second_sample.txt'
+    params = { count_line: true, count_word: true, count_byte: true }
+    expected = `wc -lwc #{first_target_file_path} #{second_target_file_path}`
+    assert_output(expected) { puts count_files([first_target_file_path, second_target_file_path], params) }
+  end
+
   def test_count_two_files_with_lw_options
     first_target_file_path = 'test/fixtures/sample.txt'
     second_target_file_path = 'test/fixtures/second_sample.txt'
     params = { count_line: true, count_word: true }
     expected = `wc -lw #{first_target_file_path} #{second_target_file_path}`
+    assert_output(expected) { puts count_files([first_target_file_path, second_target_file_path], params) }
+  end
+
+  def test_count_two_files_with_lc_options
+    first_target_file_path = 'test/fixtures/sample.txt'
+    second_target_file_path = 'test/fixtures/second_sample.txt'
+    params = { count_line: true, count_byte: true }
+    expected = `wc -lc #{first_target_file_path} #{second_target_file_path}`
+    assert_output(expected) { puts count_files([first_target_file_path, second_target_file_path], params) }
+  end
+
+  def test_count_two_files_with_wc_options
+    first_target_file_path = 'test/fixtures/sample.txt'
+    second_target_file_path = 'test/fixtures/second_sample.txt'
+    params = { count_word: true, count_byte: true }
+    expected = `wc -wc #{first_target_file_path} #{second_target_file_path}`
     assert_output(expected) { puts count_files([first_target_file_path, second_target_file_path], params) }
   end
 
