@@ -67,17 +67,60 @@ class MultipleOptionsTest < Minitest::Test
     assert_output(expected) { puts count_files([first_target_file_path, second_target_file_path], params) }
   end
 
+  # 標準入力をカウントするテスト
+  def test_count_stdin_with_lwc_options
+    stdin = "<<EOS
+London Bridge is falling down
+Falling down, falling down
+London Bridge is falling down
+Myfiar lady
+EOS\n"
+    expected = `wc -lwc #{stdin}`
+    text = "London Bridge is falling down\nFalling down, falling down\nLondon Bridge is falling down\nMyfiar lady\n"
+    $stdin = StringIO.new(text)
+    params = { count_line: true, count_word: true, count_byte: true }
+    assert_output(expected) { puts count_stdin($stdin, params) }
+  end
+
   def test_count_stdin_with_lw_options
     stdin = "<<EOS
-              London Bridge is falling down
-              Falling down, falling down
-              London Bridge is falling down
-              Myfiar lady
+London Bridge is falling down
+Falling down, falling down
+London Bridge is falling down
+Myfiar lady
 EOS\n"
     expected = `wc -lw #{stdin}`
     text = "London Bridge is falling down\nFalling down, falling down\nLondon Bridge is falling down\nMyfiar lady\n"
     $stdin = StringIO.new(text)
     params = { count_line: true, count_word: true }
+    assert_output(expected) { puts count_stdin($stdin, params) }
+  end
+
+  def test_count_stdin_with_lc_options
+    stdin = "<<EOS
+London Bridge is falling down
+Falling down, falling down
+London Bridge is falling down
+Myfiar lady
+EOS\n"
+    expected = `wc -lc #{stdin}`
+    text = "London Bridge is falling down\nFalling down, falling down\nLondon Bridge is falling down\nMyfiar lady\n"
+    $stdin = StringIO.new(text)
+    params = { count_line: true, count_byte: true }
+    assert_output(expected) { puts count_stdin($stdin, params) }
+  end
+
+  def test_count_stdin_with_wc_options
+    stdin = "<<EOS
+London Bridge is falling down
+Falling down, falling down
+London Bridge is falling down
+Myfiar lady
+EOS\n"
+    expected = `wc -wc #{stdin}`
+    text = "London Bridge is falling down\nFalling down, falling down\nLondon Bridge is falling down\nMyfiar lady\n"
+    $stdin = StringIO.new(text)
+    params = { count_word: true, count_byte: true }
     assert_output(expected) { puts count_stdin($stdin, params) }
   end
 end
