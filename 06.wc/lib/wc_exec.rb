@@ -14,4 +14,4 @@ opt.parse!(ARGV)
 # オプションが未指定の時は、全てのオプションを実行する
 params = { count_line: true, count_word: true, count_byte: true } if params.empty?
 
-puts ARGV.empty? ? count_stdin($stdin, params) : count_files(ARGV, params)
+puts ARGV.empty? ? count_stdin(params) : count_files(ARGV, params)

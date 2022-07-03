@@ -35,6 +35,6 @@ EOS\n"
     text = "RuboCop is a Ruby static code analyzer (a.k.a. linter) and code formatter.\n"
     $stdin = StringIO.new(text)
     params = { count_byte: true }
-    assert_output(expected) { puts count_stdin($stdin, params) }
+    assert_output(expected) { puts count_stdin(params) }
   end
 end

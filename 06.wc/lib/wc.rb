@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-require 'debug'
-def count_stdin(stdin, params)
-  text = stdin.read
+
+def count_stdin(params)
+  text = $stdin.read
   line = count_line(text) if params[:count_line]
   word = count_word(text) if params[:count_word]
   byte = count_byte(text) if params[:count_byte]

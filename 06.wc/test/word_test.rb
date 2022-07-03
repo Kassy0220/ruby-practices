@@ -35,6 +35,6 @@ EOS\n"
     expected = `wc -w #{stdin}`
     $stdin = StringIO.new(text)
     params = { count_word: true }
-    assert_output(expected) { puts count_stdin($stdin, params) }
+    assert_output(expected) { puts count_stdin(params) }
   end
 end

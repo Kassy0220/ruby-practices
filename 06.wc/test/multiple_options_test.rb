@@ -79,7 +79,7 @@ EOS\n"
     text = "London Bridge is falling down\nFalling down, falling down\nLondon Bridge is falling down\nMyfiar lady\n"
     $stdin = StringIO.new(text)
     params = { count_line: true, count_word: true, count_byte: true }
-    assert_output(expected) { puts count_stdin($stdin, params) }
+    assert_output(expected) { puts count_stdin(params) }
   end
 
   def test_count_stdin_with_lw_options
@@ -93,7 +93,7 @@ EOS\n"
     text = "London Bridge is falling down\nFalling down, falling down\nLondon Bridge is falling down\nMyfiar lady\n"
     $stdin = StringIO.new(text)
     params = { count_line: true, count_word: true }
-    assert_output(expected) { puts count_stdin($stdin, params) }
+    assert_output(expected) { puts count_stdin(params) }
   end
 
   def test_count_stdin_with_lc_options
@@ -107,7 +107,7 @@ EOS\n"
     text = "London Bridge is falling down\nFalling down, falling down\nLondon Bridge is falling down\nMyfiar lady\n"
     $stdin = StringIO.new(text)
     params = { count_line: true, count_byte: true }
-    assert_output(expected) { puts count_stdin($stdin, params) }
+    assert_output(expected) { puts count_stdin(params) }
   end
 
   def test_count_stdin_with_wc_options
@@ -121,6 +121,6 @@ EOS\n"
     text = "London Bridge is falling down\nFalling down, falling down\nLondon Bridge is falling down\nMyfiar lady\n"
     $stdin = StringIO.new(text)
     params = { count_word: true, count_byte: true }
-    assert_output(expected) { puts count_stdin($stdin, params) }
+    assert_output(expected) { puts count_stdin(params) }
   end
 end

@@ -36,6 +36,6 @@ EOS\n"
     expected = `wc -l #{stdin}`
     $stdin = StringIO.new("hoge\nfuga\npiyo\n")
     params = { count_line: true }
-    assert_output(expected) { puts count_stdin($stdin, params) }
+    assert_output(expected) { puts count_stdin(params) }
   end 
 end
