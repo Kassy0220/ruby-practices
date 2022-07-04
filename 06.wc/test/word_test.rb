@@ -5,35 +5,35 @@ require 'stringio'
 require_relative '../lib/wc'
 
 class WordTest < Minitest::Test
+  TARGET_PATH = 'test/fixtures/sample.txt'
+  SECOND_TARGET_PATH = 'test/fixtures/second_sample.txt'
+  EMPTY_TARGET_PATH = 'test/fixtures/empty.txt'
+  HEREDOCUMENT = "<<EOS
+RuboCop is a Ruby static code analyzer (a.k.a. linter) and code formatter.
+EOS\n"
+  TEXT = "RuboCop is a Ruby static code analyzer (a.k.a. linter) and code formatter.\n"
+
   def test_count_words_in_a_file
-    target_file_path = 'test/fixtures/sample.txt'
-    expected = `wc -w #{target_file_path}`
+    expected = `wc -w #{TARGET_PATH}`
     params = { count_word: true }
-    assert_output(expected) { puts count_files([target_file_path], params) }
+    assert_output(expected) { puts count_files([TARGET_PATH], params) }
   end
 
   def test_count_words_in_two_files
-    first_target_file_path = 'test/fixtures/sample.txt'
-    second_target_file_path = 'test/fixtures/second_sample.txt'
-    expected = `wc -w #{first_target_file_path} #{second_target_file_path}`
+    expected = `wc -w #{TARGET_PATH} #{SECOND_TARGET_PATH}`
     params = { count_word: true }
-    assert_output(expected) { puts count_files([first_target_file_path, second_target_file_path], params) }
+    assert_output(expected) { puts count_files([TARGET_PATH, SECOND_TARGET_PATH], params) }
   end
 
   def test_count_words_in_empty_file
-    target_file_path = 'test/fixtures/empty.txt'
-    expected = `wc -w #{target_file_path}`
+    expected = `wc -w #{EMPTY_TARGET_PATH}`
     params = { count_word: true }
-    assert_output(expected) { puts count_files([target_file_path], params) }
+    assert_output(expected) { puts count_files([EMPTY_TARGET_PATH], params) }
   end
 
   def test_count_words_in_stdin
-    stdin = "<<EOS
-RuboCop is a Ruby static code analyzer (a.k.a. linter) and code formatter.
-EOS\n"
-    expected = `wc -w #{stdin}`
-    text = "RuboCop is a Ruby static code analyzer (a.k.a. linter) and code formatter.\n"
-    $stdin = StringIO.new(text)
+    expected = `wc -w #{HEREDOCUMENT}`
+    $stdin = StringIO.new(TEXT)
     params = { count_word: true }
     assert_output(expected) { puts count_stdin(params) }
   end
