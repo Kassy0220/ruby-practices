@@ -23,7 +23,7 @@ def count_files(argv, params)
 
     counting_results.push file
   end
-  
+
   if counting_results.size >= 2
     total = {}
     save_sum_of_each_results(total, counting_results, params)
@@ -37,10 +37,11 @@ def count_files(argv, params)
 end
 
 def save_counting_result(result_hash, params, text)
+  text = text
   params.each_key do |option|
-    key = option[-4..-1].to_sym
-    # paramsのkeyと同じ名前のメソッド(count_line, count_word, count_byte)を実行する 
-    result_hash[key] = eval("#{option.to_s}(text)")
+    key = option.to_s.gsub(/count_/, '').to_sym
+    # paramsのkeyと同じ名前のメソッド(count_line, count_word, count_byte)を実行する
+    result_hash[key] = eval("#{option}(text)")
   end
 end
 
@@ -61,14 +62,14 @@ def create_format(params)
   format_model.push '%<line>8d' if params[:count_line]
   format_model.push '%<word>8d' if params[:count_word]
   format_model.push '%<byte>8d' if params[:count_byte]
-  format_model.push ' %<name>s' 
+  format_model.push ' %<name>s'
   format_model.join
 end
 
 def save_sum_of_each_results(total, counting_results, params)
   total[:name] = 'total'
   params.each_key do |option|
-    key = option[-4..-1].to_sym
+    key = option.to_s.gsub(/count_/, '').to_sym
     total[key] = counting_results.sum { |file| file[key] }
   end
 end
