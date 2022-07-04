@@ -26,11 +26,7 @@ def count_files(argv, params)
   
   if counting_results.size >= 2
     total = {}
-    ## TODO: メソッドに切り出す??
-    total[:name] = 'total'
-    total[:line] = counting_results.sum { |file| file[:line] } if params[:count_line]
-    total[:word] = counting_results.sum { |file| file[:word] } if params[:count_word]
-    total[:byte] = counting_results.sum { |file| file[:byte] } if params[:count_byte]
+    save_sum_of_each_results(total, counting_results, params)
     counting_results.push total
   end
 
@@ -42,9 +38,9 @@ end
 
 def save_counting_result(result_hash, params, text)
   params.each_key do |option|
-    symbol = option[-4..-1].to_sym
+    key = option[-4..-1].to_sym
     # paramsのkeyと同じ名前のメソッド(count_line, count_word, count_byte)を実行する 
-    result_hash[symbol] = eval("#{option.to_s}(text)")
+    result_hash[key] = eval("#{option.to_s}(text)")
   end
 end
 
@@ -67,4 +63,12 @@ def create_format(params)
   format_model.push '%<byte>8d' if params[:count_byte]
   format_model.push ' %<name>s' 
   format_model.join
+end
+
+def save_sum_of_each_results(total, counting_results, params)
+  total[:name] = 'total'
+  params.each_key do |option|
+    key = option[-4..-1].to_sym
+    total[key] = counting_results.sum { |file| file[key] }
+  end
 end
