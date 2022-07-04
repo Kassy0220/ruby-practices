@@ -29,9 +29,9 @@ class LineTest < Minitest::Test
 
   def test_count_lines_in_stdin
     stdin = "<<EOS
-              hoge
-              fuga
-              piyo
+hoge
+fuga
+piyo
 EOS\n"
     expected = `wc -l #{stdin}`
     $stdin = StringIO.new("hoge\nfuga\npiyo\n")
