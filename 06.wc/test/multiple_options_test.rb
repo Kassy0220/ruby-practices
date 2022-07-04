@@ -5,121 +5,91 @@ require 'stringio'
 require_relative '../lib/wc'
 
 class MultipleOptionsTest < Minitest::Test
+  TARGET_PATH = 'test/fixtures/sample.txt'
+  SECOND_TARGET_PATH = 'test/fixtures/second_sample.txt'
+  HEREDOCUMENT = "<<EOS
+London Bridge is falling down
+Falling down, falling down
+London Bridge is falling down
+My fair lady
+EOS\n"
+  TEXT = "London Bridge is falling down\nFalling down, falling down\nLondon Bridge is falling down\nMy fair lady\n"
+
   # 引数にファイルを1つ指定した時のテスト
   def test_count_a_file_with_lwc_options
-    target_file_path = 'test/fixtures/sample.txt'
     params = { count_line: true, count_word: true, count_byte: true }
-    expected = `wc -lwc #{target_file_path}`
-    assert_output(expected) { puts count_files([target_file_path], params) }
+    expected = `wc -lwc #{TARGET_PATH}`
+    assert_output(expected) { puts count_files([TARGET_PATH], params) }
   end
 
   def test_count_a_file_with_lw_options
-    target_file_path = 'test/fixtures/sample.txt'
     params = { count_line: true, count_word: true }
-    expected = `wc -lw #{target_file_path}`
-    assert_output(expected) { puts count_files([target_file_path], params) }
+    expected = `wc -lw #{TARGET_PATH}`
+    assert_output(expected) { puts count_files([TARGET_PATH], params) }
   end
 
   def test_count_a_file_with_lc_options
-    target_file_path = 'test/fixtures/sample.txt'
     params = { count_line: true, count_byte: true }
-    expected = `wc -lc #{target_file_path}`
-    assert_output(expected) { puts count_files([target_file_path], params) }
+    expected = `wc -lc #{TARGET_PATH}`
+    assert_output(expected) { puts count_files([TARGET_PATH], params) }
   end
 
   def test_count_a_file_with_wc_options
-    target_file_path = 'test/fixtures/sample.txt'
     params = { count_word: true, count_byte: true }
-    expected = `wc -wc #{target_file_path}`
-    assert_output(expected) { puts count_files([target_file_path], params) }
+    expected = `wc -wc #{TARGET_PATH}`
+    assert_output(expected) { puts count_files([TARGET_PATH], params) }
   end
 
   # 引数にファイルを2つ指定した時のテスト
   def test_count_two_files_with_lwc_options
-    first_target_file_path = 'test/fixtures/sample.txt'
-    second_target_file_path = 'test/fixtures/second_sample.txt'
     params = { count_line: true, count_word: true, count_byte: true }
-    expected = `wc -lwc #{first_target_file_path} #{second_target_file_path}`
-    assert_output(expected) { puts count_files([first_target_file_path, second_target_file_path], params) }
+    expected = `wc -lwc #{TARGET_PATH} #{SECOND_TARGET_PATH}`
+    assert_output(expected) { puts count_files([TARGET_PATH, SECOND_TARGET_PATH], params) }
   end
 
   def test_count_two_files_with_lw_options
-    first_target_file_path = 'test/fixtures/sample.txt'
-    second_target_file_path = 'test/fixtures/second_sample.txt'
     params = { count_line: true, count_word: true }
-    expected = `wc -lw #{first_target_file_path} #{second_target_file_path}`
-    assert_output(expected) { puts count_files([first_target_file_path, second_target_file_path], params) }
+    expected = `wc -lw #{TARGET_PATH} #{SECOND_TARGET_PATH}`
+    assert_output(expected) { puts count_files([TARGET_PATH, SECOND_TARGET_PATH], params) }
   end
 
   def test_count_two_files_with_lc_options
-    first_target_file_path = 'test/fixtures/sample.txt'
-    second_target_file_path = 'test/fixtures/second_sample.txt'
     params = { count_line: true, count_byte: true }
-    expected = `wc -lc #{first_target_file_path} #{second_target_file_path}`
-    assert_output(expected) { puts count_files([first_target_file_path, second_target_file_path], params) }
+    expected = `wc -lc #{TARGET_PATH} #{SECOND_TARGET_PATH}`
+    assert_output(expected) { puts count_files([TARGET_PATH, SECOND_TARGET_PATH], params) }
   end
 
   def test_count_two_files_with_wc_options
-    first_target_file_path = 'test/fixtures/sample.txt'
-    second_target_file_path = 'test/fixtures/second_sample.txt'
     params = { count_word: true, count_byte: true }
-    expected = `wc -wc #{first_target_file_path} #{second_target_file_path}`
-    assert_output(expected) { puts count_files([first_target_file_path, second_target_file_path], params) }
+    expected = `wc -wc #{TARGET_PATH} #{SECOND_TARGET_PATH}`
+    assert_output(expected) { puts count_files([TARGET_PATH, SECOND_TARGET_PATH], params) }
   end
 
   # 標準入力をカウントするテスト
   def test_count_stdin_with_lwc_options
-    stdin = "<<EOS
-London Bridge is falling down
-Falling down, falling down
-London Bridge is falling down
-Myfiar lady
-EOS\n"
-    expected = `wc -lwc #{stdin}`
-    text = "London Bridge is falling down\nFalling down, falling down\nLondon Bridge is falling down\nMyfiar lady\n"
-    $stdin = StringIO.new(text)
+    expected = `wc -lwc #{HEREDOCUMENT}`
+    $stdin = StringIO.new(TEXT)
     params = { count_line: true, count_word: true, count_byte: true }
     assert_output(expected) { puts count_stdin(params) }
   end
 
   def test_count_stdin_with_lw_options
-    stdin = "<<EOS
-London Bridge is falling down
-Falling down, falling down
-London Bridge is falling down
-Myfiar lady
-EOS\n"
-    expected = `wc -lw #{stdin}`
-    text = "London Bridge is falling down\nFalling down, falling down\nLondon Bridge is falling down\nMyfiar lady\n"
-    $stdin = StringIO.new(text)
+    expected = `wc -lw #{HEREDOCUMENT}`
+    $stdin = StringIO.new(TEXT)
     params = { count_line: true, count_word: true }
     assert_output(expected) { puts count_stdin(params) }
   end
 
   def test_count_stdin_with_lc_options
-    stdin = "<<EOS
-London Bridge is falling down
-Falling down, falling down
-London Bridge is falling down
-Myfiar lady
-EOS\n"
-    expected = `wc -lc #{stdin}`
-    text = "London Bridge is falling down\nFalling down, falling down\nLondon Bridge is falling down\nMyfiar lady\n"
-    $stdin = StringIO.new(text)
+    expected = `wc -lc #{HEREDOCUMENT}`
+    $stdin = StringIO.new(TEXT)
     params = { count_line: true, count_byte: true }
     assert_output(expected) { puts count_stdin(params) }
   end
 
   def test_count_stdin_with_wc_options
-    stdin = "<<EOS
-London Bridge is falling down
-Falling down, falling down
-London Bridge is falling down
-Myfiar lady
-EOS\n"
-    expected = `wc -wc #{stdin}`
-    text = "London Bridge is falling down\nFalling down, falling down\nLondon Bridge is falling down\nMyfiar lady\n"
-    $stdin = StringIO.new(text)
+    expected = `wc -wc #{HEREDOCUMENT}`
+    $stdin = StringIO.new(TEXT)
     params = { count_word: true, count_byte: true }
     assert_output(expected) { puts count_stdin(params) }
   end
