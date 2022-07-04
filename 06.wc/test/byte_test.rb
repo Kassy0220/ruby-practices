@@ -18,16 +18,16 @@ EOS\n"
     assert_output(expected) { puts count_files([TARGET_PATH], params) }
   end
 
-  def test_count_bytes_in_empty_file
-    expected = `wc -c #{TARGET_PATH}`
-    params = { count_byte: true }
-    assert_output(expected) { puts count_files([TARGET_PATH], params) }
-  end
-
   def test_count_words_in_two_files
     expected = `wc -c #{TARGET_PATH} #{SECOND_TARGET_PATH}`
     params = { count_byte: true }
     assert_output(expected) { puts count_files([TARGET_PATH, SECOND_TARGET_PATH], params) }
+  end
+
+  def test_count_bytes_in_empty_file
+    expected = `wc -c #{TARGET_PATH}`
+    params = { count_byte: true }
+    assert_output(expected) { puts count_files([TARGET_PATH], params) }
   end
 
   def test_count_bytes_in_stdin
