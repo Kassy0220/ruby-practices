@@ -2,12 +2,12 @@
 
 def count_stdin(params)
   text = $stdin.read
-  line = count_line(text) if params[:count_line]
-  word = count_word(text) if params[:count_word]
-  byte = count_byte(text) if params[:count_byte]
+  counting_result = {}
+
+  save_counting_result(counting_result, params, text)
 
   format_model = create_format(params).gsub(/ %<name>s/, '')
-  format(format_model, line: line, word: word, byte: byte)
+  format(format_model, line: counting_result[:line], word: counting_result[:word], byte: counting_result[:byte])
 end
 
 def count_files(argv, params)
@@ -17,10 +17,9 @@ def count_files(argv, params)
   target_files.each do |target_file|
     text = IO.read(target_file)
     file = {}
+
     file[:name] = target_file
-    file[:line] = count_line(text) if params[:count_line]
-    file[:word] = count_word(text) if params[:count_word]
-    file[:byte] = count_byte(text) if params[:count_byte]
+    save_counting_result(file, params, text)
 
     counting_results.push file
   end
@@ -39,6 +38,14 @@ def count_files(argv, params)
   counting_results.map do |file|
     format(format_model, line: file[:line], word: file[:word], byte: file[:byte], name: file[:name])
   end.join("\n")
+end
+
+def save_counting_result(result_hash, params, text)
+  params.each_key do |option|
+    symbol = option[-4..-1].to_sym
+    # paramsのkeyと同じ名前のメソッド(count_line, count_word, count_byte)を実行する 
+    result_hash[symbol] = eval("#{option.to_s}(text)")
+  end
 end
 
 def count_line(text)
