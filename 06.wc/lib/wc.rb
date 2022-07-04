@@ -37,24 +37,10 @@ def count_files(argv, params)
 end
 
 def save_counting_result(result_hash, params, text)
-  text = text
   params.each_key do |option|
     key = option.to_s.gsub(/count_/, '').to_sym
-    # paramsのkeyと同じ名前のメソッド(count_line, count_word, count_byte)を実行する
-    result_hash[key] = eval("#{option}(text)")
+    result_hash[key] = CounterModule.public_send(option.to_s, text)
   end
-end
-
-def count_line(text)
-  text.count("\n")
-end
-
-def count_word(text)
-  text.scan(/\S+/).size
-end
-
-def count_byte(text)
-  text.bytesize
 end
 
 def create_format(params)
@@ -71,5 +57,21 @@ def save_sum_of_each_results(total, counting_results, params)
   params.each_key do |option|
     key = option.to_s.gsub(/count_/, '').to_sym
     total[key] = counting_results.sum { |file| file[key] }
+  end
+end
+
+module CounterModule
+  class << self
+    def count_line(text)
+      text.count("\n")
+    end
+
+    def count_word(text)
+      text.scan(/\S+/).size
+    end
+
+    def count_byte(text)
+      text.bytesize
+    end
   end
 end
