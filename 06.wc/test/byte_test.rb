@@ -7,6 +7,7 @@ require_relative '../lib/wc'
 class ByteTest < Minitest::Test
   TARGET_PATH = 'test/fixtures/sample.txt'
   SECOND_TARGET_PATH = 'test/fixtures/second_sample.txt'
+  EMPTY_TARGET_PATH = 'test/fixtures/empty.txt'
   HEREDOCUMENT = "<<EOS
 RuboCop is a Ruby static code analyzer (a.k.a. linter) and code formatter.
 EOS\n"
@@ -25,9 +26,9 @@ EOS\n"
   end
 
   def test_count_bytes_in_empty_file
-    expected = `wc -c #{TARGET_PATH}`
+    expected = `wc -c #{ EMPTY_TARGET_PATH}`
     params = { count_byte: true }
-    assert_output(expected) { puts count_files([TARGET_PATH], params) }
+    assert_output(expected) { puts count_files([EMPTY_TARGET_PATH], params) }
   end
 
   def test_count_bytes_in_stdin
