@@ -6,8 +6,8 @@ def count_stdin(params)
 
   save_counting_result(counting_result, params, text)
 
-  format_model = create_format(params, file_flag: false)
-  format(format_model, line: counting_result[:line], word: counting_result[:word], byte: counting_result[:byte])
+  format_model = create_format(params)
+  format(format_model, line: counting_result[:line], word: counting_result[:word], byte: counting_result[:byte], name: '').rstrip
 end
 
 def count_files(argv, params)
@@ -43,12 +43,12 @@ def save_counting_result(result_hash, params, text)
   end
 end
 
-def create_format(params, file_flag: true)
+def create_format(params)
   format_model = []
   format_model.push '%<line>8d' if params[:count_line]
   format_model.push '%<word>8d' if params[:count_word]
   format_model.push '%<byte>8d' if params[:count_byte]
-  format_model.push ' %<name>s' if file_flag
+  format_model.push ' %<name>s'
   format_model.join
 end
 
