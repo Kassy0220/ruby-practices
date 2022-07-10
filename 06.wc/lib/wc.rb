@@ -2,9 +2,8 @@
 
 def count_stdin(params)
   text = $stdin.read
-  counting_result = {}
 
-  save_counting_result(counting_result, params, text)
+  counting_result = save_counting_result(params, text: text)
 
   format_model = create_format(params)
   format(format_model, line: counting_result[:line], word: counting_result[:word], byte: counting_result[:byte], name: '').rstrip
@@ -16,19 +15,10 @@ def count_files(argv, params)
 
   target_files.each do |target_file|
     text = IO.read(target_file)
-    file = {}
-
-    file[:name] = target_file
-    save_counting_result(file, params, text)
-
-    counting_results.push file
+    counting_results.push save_counting_result(params, target_file: target_file, text: text)
   end
 
-  if counting_results.size >= 2
-    total = {}
-    save_sum_of_each_results(total, counting_results, params)
-    counting_results.push total
-  end
+  counting_results.push save_counting_result(params, result_array: counting_results) if counting_results.size >= 2
 
   format_model = create_format(params)
   counting_results.map do |file|
@@ -36,11 +26,15 @@ def count_files(argv, params)
   end.join("\n")
 end
 
-def save_counting_result(result_hash, params, text)
+def save_counting_result(params, target_file: false, text: false, result_array: false)
+  file = {}
+  # ファイル・標準入力をカウントする or カウントを合計する
+  file[:name] = text ? target_file : 'total'
   params.each_key do |option|
     key = option.to_s.gsub(/count_/, '').to_sym
-    result_hash[key] = CounterModule.public_send(option.to_s, text)
+    file[key] = text ? CounterModule.public_send(option.to_s, text) : result_array.sum { |file_hash| file_hash[key] }
   end
+  file
 end
 
 def create_format(params)
@@ -50,14 +44,6 @@ def create_format(params)
   format_model.push '%<byte>8d' if params[:count_byte]
   format_model.push ' %<name>s'
   format_model.join
-end
-
-def save_sum_of_each_results(total, counting_results, params)
-  total[:name] = 'total'
-  params.each_key do |option|
-    key = option.to_s.gsub(/count_/, '').to_sym
-    total[key] = counting_results.sum { |file| file[key] }
-  end
 end
 
 module CounterModule
