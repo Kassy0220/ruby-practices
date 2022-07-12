@@ -30,11 +30,10 @@ def save_counting_result(params, target_file: false, text: false, result_array: 
   file = {}
   # ファイル・標準入力をカウントする or カウントを合計する
   file[:name] = text ? target_file : 'total'
-  params.each_key do |option|
+  params.each_key.with_object(file) do |option, file|
     key = option.to_s.gsub(/count_/, '').to_sym
     file[key] = text ? CounterModule.public_send(option.to_s, text) : result_array.sum { |file_hash| file_hash[key] }
   end
-  file
 end
 
 def create_format(params)
