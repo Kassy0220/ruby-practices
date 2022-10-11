@@ -2,9 +2,10 @@
 
 # ファイルの中身の取得処理と、表示用に整形する処理を実装したクラス
 class Builder
-  def initialize(path)
+  def initialize(path, options)
     @content = Content.new
     @searched_path = path
+    @options = options
     @number_of_columns = 3
   end
 
@@ -15,7 +16,8 @@ class Builder
   def collect_path
     return @content.paths = [File.basename(@searched_path)] unless File.directory?(@searched_path)
 
-    @content.paths = Dir.glob('*', base: @searched_path).sort
+    flag = @options[:dot_match] ? File::FNM_DOTMATCH : 0
+    @content.paths = Dir.glob('*', flag, base: @searched_path).sort
   end
 
   def format
