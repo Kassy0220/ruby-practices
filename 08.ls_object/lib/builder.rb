@@ -17,7 +17,8 @@ class Builder
     return @content.paths = [File.basename(@searched_path)] unless File.directory?(@searched_path)
 
     flag = @options[:dot_match] ? File::FNM_DOTMATCH : 0
-    @content.paths = Dir.glob('*', flag, base: @searched_path).sort
+    paths = Dir.glob('*', flag, base: @searched_path).sort
+    @content.paths = @options[:reverse] ? paths.reverse : paths
   end
 
   def format

@@ -9,6 +9,7 @@ opt = OptionParser.new
 options = {}
 
 opt.on('-a') { |v| options[:dot_match] = v }
+opt.on('-r') { |v| options[:reverse] = v }
 opt.parse!(ARGV)
 
 searched_path = ARGV[0] || '.'

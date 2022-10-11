@@ -43,4 +43,14 @@ class LsCommandTest < Minitest::Test
     TEXT
     assert_equal expected, List.list('../', { dot_match: true })
   end
+
+  def test_with_r_option
+    expected = <<~TEXT.chomp
+      README.md             06.wc                 02.calendar
+      09.wc_object          05.ls                 01.fizzbuzz
+      08.ls_object          04.bowling
+      07.bowling_object     03.rake
+    TEXT
+    assert_equal expected, List.list('../', { reverse: true })
+  end
 end
