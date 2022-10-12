@@ -77,4 +77,22 @@ class LsCommandTest < Minitest::Test
     TEXT
     assert_equal expected, List.list('../README.md', { long_format: true })
   end
+
+  def test_with_all_options
+    expected = <<~TEXT.chomp
+      total 0
+      lrwxr-xr-x   1 kashiyama  staff   10 10 10 15:06 symbolic_link -> sample.txt
+      -rwSr-xr-x   1 kashiyama  staff    0 10 10 14:49 suid_without_x
+      -rwsr-xr-x   1 kashiyama  staff    0 10 10 14:49 suid
+      drwxr-xr-T   2 kashiyama  staff   64 10 10 14:49 stickybit_without_x
+      drwxr-xr-t   2 kashiyama  staff   64 10 10 14:49 stickybit
+      -rwxr-Sr-x   1 kashiyama  staff    0 10 10 14:49 sgid_without_x
+      -rwxr-sr-x   1 kashiyama  staff    0 10 10 14:49 sgid
+      drwxr-xr-x   2 kashiyama  staff   64 10 10 14:49 sample_directory
+      -rw-r--r--   1 kashiyama  staff    0 10 10 14:49 sample.txt
+      prw-r--r--   1 kashiyama  staff    0 10 10 14:49 fifo
+      drwxr-xr-x  12 kashiyama  staff  384 10 10 15:06 .
+    TEXT
+    assert_equal expected, List.list('./test/fixtures/ls_sample_longformat', { dot_match: true, reverse: true, long_format: true })
+  end
 end
