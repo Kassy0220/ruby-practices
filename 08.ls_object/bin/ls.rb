@@ -2,8 +2,6 @@
 
 require 'optparse'
 require_relative '../lib/list'
-require_relative '../lib/builder'
-require_relative '../lib/content'
 
 opt = OptionParser.new
 options = {}
