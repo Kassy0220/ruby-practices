@@ -14,7 +14,6 @@ class ListCommand
 
   def list_paths
     @builder.collect_path
-    @builder.format
     @builder.result
   end
 end
