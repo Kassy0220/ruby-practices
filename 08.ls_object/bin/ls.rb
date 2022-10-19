@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'optparse'
-require_relative '../lib/list'
+require_relative '../lib/list_command'
 
 opt = OptionParser.new
 options = {}
@@ -12,4 +12,4 @@ opt.on('-l') { |v| options[:long_format] = v }
 opt.parse!(ARGV)
 
 searched_path = ARGV[0] || '.'
-puts List.list(searched_path, options)
+puts ListCommand.list_paths(searched_path, options)

@@ -4,16 +4,16 @@ require_relative 'builder'
 require_relative 'content'
 
 # Builderで用意されているメソッドを実行して、ディレクトリの中身を取得するクラス
-class List
-  def self.list(path, options)
-    new(path, options).list
+class ListCommand
+  def self.list_paths(path, options)
+    new(path, options).list_paths
   end
 
   def initialize(path, options)
     @builder = Builder.new(path, options)
   end
 
-  def list
+  def list_paths
     @builder.collect_path
     @builder.format
     @builder.result

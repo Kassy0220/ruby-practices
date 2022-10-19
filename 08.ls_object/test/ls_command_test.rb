@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'minitest/autorun'
-require_relative '../lib/list'
+require_relative '../lib/list_command'
 
 class LsCommandTest < Minitest::Test
   def test_ls_without_options
@@ -11,7 +11,7 @@ class LsCommandTest < Minitest::Test
       03.rake               07.bowling_object
       04.bowling            08.ls_object
     TEXT
-    assert_equal expected, List.list('../', {})
+    assert_equal expected, ListCommand.list_paths('../', {})
   end
 
   def test_not_ascii_filename
@@ -23,14 +23,14 @@ class LsCommandTest < Minitest::Test
       Metroid                 スマブラX               マリオカート
       Newポケモンスナップ     ゼノブレイド3
     TEXT
-    assert_equal expected, List.list('./test/fixtures/ls_sample_directory', {})
+    assert_equal expected, ListCommand.list_paths('./test/fixtures/ls_sample_directory', {})
   end
 
   def test_search_file
     expected = <<~TEXT.chomp
       ls.rb
     TEXT
-    assert_equal expected, List.list('./bin/ls.rb', {})
+    assert_equal expected, ListCommand.list_paths('./bin/ls.rb', {})
   end
 
   def test_with_a_option
@@ -41,7 +41,7 @@ class LsCommandTest < Minitest::Test
       .gitignore            04.bowling            09.wc_object
       .rubocop.yml          05.ls                 README.md
     TEXT
-    assert_equal expected, List.list('../', { dot_match: true })
+    assert_equal expected, ListCommand.list_paths('../', { dot_match: true })
   end
 
   def test_with_r_option
@@ -51,7 +51,7 @@ class LsCommandTest < Minitest::Test
       08.ls_object          04.bowling
       07.bowling_object     03.rake
     TEXT
-    assert_equal expected, List.list('../', { reverse: true })
+    assert_equal expected, ListCommand.list_paths('../', { reverse: true })
   end
 
   def test_with_l_option
@@ -68,14 +68,14 @@ class LsCommandTest < Minitest::Test
       -rwSr-xr-x  1 kashiyama  staff   0 10 10 14:49 suid_without_x
       lrwxr-xr-x  1 kashiyama  staff  10 10 10 15:06 symbolic_link -> sample.txt
     TEXT
-    assert_equal expected, List.list('./test/fixtures/ls_sample_longformat', { long_format: true })
+    assert_equal expected, ListCommand.list_paths('./test/fixtures/ls_sample_longformat', { long_format: true })
   end
 
   def test_search_file_with_l_option
     expected = <<~TEXT.chomp
       -rw-r--r--  1 kashiyama  staff  2648  5 13 08:47 README.md
     TEXT
-    assert_equal expected, List.list('../README.md', { long_format: true })
+    assert_equal expected, ListCommand.list_paths('../README.md', { long_format: true })
   end
 
   def test_with_all_options
@@ -93,6 +93,6 @@ class LsCommandTest < Minitest::Test
       prw-r--r--   1 kashiyama  staff    0 10 10 14:49 fifo
       drwxr-xr-x  12 kashiyama  staff  384 10 10 15:06 .
     TEXT
-    assert_equal expected, List.list('./test/fixtures/ls_sample_longformat', { dot_match: true, reverse: true, long_format: true })
+    assert_equal expected, ListCommand.list_paths('./test/fixtures/ls_sample_longformat', { dot_match: true, reverse: true, long_format: true })
   end
 end
