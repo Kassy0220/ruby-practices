@@ -9,23 +9,24 @@ class Builder
   include FileType
   include FilePermission
 
+  attr_writer :collected_paths, :formatted_paths
+
   def initialize(path, options)
-    @content = Content.new
     @searched_path = path
     @options = options
     @number_of_columns = 3
   end
 
   def result
-    @content.formatted_paths
+    @formatted_paths
   end
 
   def collect_path
-    return @content.paths = [File.basename(@searched_path)] unless directory?
+    return @collected_paths = [File.basename(@searched_path)] unless directory?
 
     flag = @options[:dot_match] ? File::FNM_DOTMATCH : 0
     paths = Dir.glob('*', flag, base: @searched_path).sort
-    @content.paths = @options[:reverse] ? paths.reverse : paths
+    @collected_paths = @options[:reverse] ? paths.reverse : paths
   end
 
   def format
@@ -35,9 +36,9 @@ class Builder
   private
 
   def long_format
-    file_statuses = @content.paths.map { |path| file_status(path) }
+    file_statuses = @collected_paths.map { |path| file_status(path) }
     max_sizes = count_max_characters(file_statuses)
-    @content.formatted_paths = format_status(file_statuses, max_sizes)
+    @formatted_paths = format_status(file_statuses, max_sizes)
   end
 
   def file_status(file)
@@ -82,7 +83,7 @@ class Builder
   end
 
   def sum_file_blocks
-    @content.paths.map { |path| File.lstat("#{@searched_path}/#{path}").blocks }.sum
+    @collected_paths.map { |path| File.lstat("#{@searched_path}/#{path}").blocks }.sum
   end
 
   def directory?
@@ -91,16 +92,17 @@ class Builder
 
   def short_format
     transposed_paths = transpose_path
-    column_width = column_width(@content.paths)
+    column_width = column_width(@collected_paths)
 
-    @content.formatted_paths = transposed_paths.map { |row| concat_row(row, column_width) }.join("\n")
+    @formatted_paths = transposed_paths.map { |row| concat_row(row, column_width) }.join("\n")
   end
 
   def transpose_path
-    number_of_rows = (@content.paths.length.to_f / @number_of_columns).ceil
+    number_of_rows = (@collected_paths.length.to_f / @number_of_columns).ceil
     # transpose を使うので、配列内の要素数が揃うように空白を追加する
-    @content.paths << '' while @content.paths.length < @number_of_columns * number_of_rows
-    @content.paths.each_slice(number_of_rows).to_a.transpose
+    paths = @collected_paths
+    paths << '' while paths.length < @number_of_columns * number_of_rows
+    paths.each_slice(number_of_rows).to_a.transpose
   end
 
   def column_width(paths)
