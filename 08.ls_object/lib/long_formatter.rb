@@ -1,14 +1,10 @@
 # frozen_string_literal: true
 
 require 'etc'
-require_relative 'filetype'
-require_relative 'filepermission'
+require_relative 'filemode'
 
 # 与えられたファイル名を、ファイル情報を付加した長い形式で表示用に整形するクラス
 class LongFormatter
-  include FileType
-  include FilePermission
-
   def initialize(searched_path, paths)
     @searched_path = searched_path
     @paths = paths
@@ -24,9 +20,9 @@ class LongFormatter
 
   def file_status(file)
     status = directory? ? File.lstat("#{@searched_path}/#{file}") : File.lstat(@searched_path)
-    mode = status.mode.to_s(8).rjust(6, '0')
-    filetype = filetype(mode[0..1])
-    permission = format_permission(mode[2..5])
+    mode = FileMode.new(status.mode.to_s(8).rjust(6, '0'))
+    filetype = mode.filetype
+    permission = mode.file_permission
     symlink = " -> #{File.readlink("#{@searched_path}/#{file}")}" if filetype == 'l'
     {
       type_and_permission: "#{filetype}#{permission}",

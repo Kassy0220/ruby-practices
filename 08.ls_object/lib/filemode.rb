@@ -1,12 +1,26 @@
 # frozen_string_literal: true
 
-# ファイルのパーミッションを返すメソッドを提供するモジュール
-module FilePermission
-  def format_permission(mode)
-    # 引数 mode は4文字の数字
-    # 先頭の数字は特殊権限を、2-4番目の数字はそれぞれ所有者、所有グループ、その他に対する権限を表す
-    special_permission = special_permission(mode[0])
-    permission = mode[1..3].chars.map { |char| permission(char) }.join
+class FileMode
+  def initialize(mode_integer)
+    @filetype_integer = mode_integer[0..1]
+    @permission_integer = mode_integer[2..5]
+  end
+
+  def filetype
+    {
+      '01' => 'p',
+      '02' => 'c',
+      '04' => 'd',
+      '06' => 'b',
+      '10' => '-',
+      '12' => 'l',
+      '14' => 's'
+    }[@filetype_integer]
+  end
+
+  def file_permission
+    permission = @permission_integer[1..3].chars.map { |char| permission(char) }.join
+    special_permission = special_permission(@permission_integer[0])
     return permission if special_permission == 'none'
 
     case special_permission
@@ -19,6 +33,8 @@ module FilePermission
     end
     permission
   end
+
+  private
 
   def permission(permission)
     {
