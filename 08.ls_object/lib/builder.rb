@@ -5,8 +5,6 @@ require_relative 'long_formatter'
 
 # ファイルの中身の取得処理と、表示用に整形する処理を実装したクラス
 class Builder
-  attr_writer :collected_paths
-
   def initialize(path, options)
     @searched_path = path
     @options = options
